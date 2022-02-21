@@ -17,7 +17,6 @@
         <tr>
             <td>@category.Id</td>
             <td>@category.Name</td>
-            <td></td>
         </tr>
     }
     </tbody>
@@ -26,9 +25,9 @@
 <button class="btn btn-primary" @onclick="(() => CreateCategory())"><i class="oi oi-plus"></i> Create category</button>
 
 @code {
-    protected override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
-        return WikiService.PopulateCategories();
+        await WikiService.PopulateCategories();
     }
 
     void CreateCategory()

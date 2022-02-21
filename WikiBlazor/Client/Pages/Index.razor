@@ -1,6 +1,23 @@
 ﻿@page "/"
+@inject IWikiService WikiService
 
 <h1>Hello, world!</h1>
+<p>
+    Welcome to the Wiki app.
+    Navigate using the sidebar to load articles and create categories. 
+</p>
 
-Welcome to the Wiki app.
-Navigate using the sidebar to load articles and create categories.
+<p>
+    To clear the database, removing all articles and categories, click the big red button.
+</p>
+
+
+<button class="btn btn-danger btn-lg" @onclick="(() => Clear())">Delete</button>
+
+@code
+{
+    async Task Clear()
+    {
+        await WikiService.Clear();
+    }
+}

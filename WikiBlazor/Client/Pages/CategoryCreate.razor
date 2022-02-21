@@ -2,8 +2,7 @@
 @using WikiBlazor.Shared.Models;
 @inject IWikiService WikiService
 
-    <h3>Create new category</h3>
-
+<h3>Create new category</h3>
 
 <EditForm Model="_category" OnSubmit="HandleSubmit">
     <div class="row">
@@ -16,7 +15,7 @@
 
 
 @code {
-    WikiBlazor.Shared.Models.Category _category = new WikiBlazor.Shared.Models.Category();
+    Category _category = new Category();
 
     async Task HandleSubmit()
     {

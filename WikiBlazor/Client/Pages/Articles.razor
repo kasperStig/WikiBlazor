@@ -5,7 +5,6 @@
 <h3>Articles</h3>
 
 <button class="btn btn-primary" @onclick="(() => LoadMoreArticles())">Load more articles</button>
-<button class="btn btn-danger" @onclick="(() => Clear())">Delete</button>
 <br />
 <table class="table">
     <thead>
@@ -33,9 +32,9 @@
 
 @code {
 
-    protected override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
-        return WikiService.PopulateArticles();
+        await WikiService.PopulateArticles();
     }
 
     void ViewArticle(long id)
@@ -51,10 +50,5 @@
     async Task LoadMoreArticles()
     {
         await WikiService.CreateArticles();
-    }
-
-    async Task Clear()
-    {
-        await WikiService.Clear();
     }
 }
