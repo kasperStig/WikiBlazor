@@ -1,0 +1,46 @@
+﻿@page "/categories/edit/{id:long}"
+@using WikiBlazor.Shared.Models
+@inject IWikiService WikiService
+
+<h3>Categories for @_article.Title</h3>
+<EditForm Model="_categories" OnSubmit="HandleSubmit">
+    @foreach(var category in _categories)
+    {
+        <div class="form-check form-switch">
+            <input id="@category.Id" type="checkbox" @bind-value="category.IsSelected" class="form-check-input" checked="@category.IsSelected"/>
+            <label class="form-check-label" for="@category.Id">@category.Name</label>
+        </div>
+    }
+    <br/>
+    <button type="submit" class="btn btn-primary">Update categories</button>
+    
+</EditForm>
+
+
+@code {
+    [Parameter]
+    public long Id { get; set; }
+
+    WikiBlazor.Shared.Models.Article _article = new Article();
+
+    class CategoryViewModel {
+        public string Name { get; set; }
+        public long Id { get; set; }
+        public bool IsSelected { get; set; }
+    }
+    List<CategoryViewModel> _categories = new List<CategoryViewModel>();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _article = await WikiService.GetArticle(Id);
+        await WikiService.PopulateCategories();
+        _categories = WikiService.Categories.Select(c => new CategoryViewModel { Name = c.Name, Id = c.Id, IsSelected = _article.Categories.Any(cat => cat.Id == c.Id) }).ToList();
+
+    }
+
+    async Task HandleSubmit()
+    {
+        var selectedCategoriesId = _categories.Where(c => c.IsSelected).Select(c => c.Id).ToList();
+        await WikiService.UpdateArticleCategoryRelation(selectedCategoriesId, _article.Id);
+    }
+}

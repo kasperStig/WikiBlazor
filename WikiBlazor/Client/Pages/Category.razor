@@ -1,0 +1,25 @@
+﻿@page "/category"
+@using WikiBlazor.Shared.Models;
+@inject IWikiService WikiService
+
+    <h3>Create new category</h3>
+
+
+<EditForm Model="_category" OnSubmit="HandleSubmit">
+    <div class="row">
+        <div class="col-6">
+            <label for="name">Name <InputText id="name" @bind-Value="_category.Name" class="form-control"></InputText></label>
+            <button type="submit" class="btn btn-primary">Create category</button>
+        </div>
+    </div>
+</EditForm>
+
+
+@code {
+    WikiBlazor.Shared.Models.Category _category = new WikiBlazor.Shared.Models.Category();
+
+    async Task HandleSubmit()
+    {
+        await WikiService.CreateCategory(_category);
+    }
+}

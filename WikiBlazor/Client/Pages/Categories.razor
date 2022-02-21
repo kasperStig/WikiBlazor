@@ -1,0 +1,38 @@
+﻿@page "/categories"
+@inject IWikiService WikiService
+@inject NavigationManager NavigationManager
+
+<h3>Categories</h3>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var category in WikiService.Categories)
+    {
+        <tr>
+            <td>@category.Id</td>
+            <td>@category.Name</td>
+            <td></td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<button class="btn btn-primary" @onclick="(() => CreateCategory())"><i class="oi oi-plus"></i> Create category</button>
+
+@code {
+    protected override Task OnInitializedAsync()
+    {
+        return WikiService.PopulateCategories();
+    }
+
+    void CreateCategory()
+    {
+        NavigationManager.NavigateTo("category");
+    }
+}

@@ -1,0 +1,60 @@
+﻿@page "/articles"
+@inject IWikiService WikiService
+@inject NavigationManager NavigationManager
+
+<h3>Articles</h3>
+
+<button class="btn btn-primary" @onclick="(() => LoadMoreArticles())">Load more articles</button>
+<button class="btn btn-danger" @onclick="(() => Clear())">Delete</button>
+<br />
+<table class="table">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Url</th>
+            <th>Categories</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var article in WikiService.Articles)
+        {
+            <tr>
+                <td><button class="btn btn-primary" @onclick="(() => ViewArticle(article.Id))"><i class="oi oi-eye"></i></button></td>
+                <td>@article.Id</td>
+                <td>@article.Title</td>
+                <td><a href="@article.Url" target="_blank">@article.Url</a></td>
+                <td><button class="btn btn-primary" @onclick="(() => EditCategories(article.Id))"><i class="oi oi-pencil"></i></button> @String.Join(", ", article.Categories.OrderBy(c => c.Name).Select(c => c.Name))</td>
+            </tr>
+      }
+    </tbody>
+</table>
+
+@code {
+
+    protected override Task OnInitializedAsync()
+    {
+        return WikiService.PopulateArticles();
+    }
+
+    void ViewArticle(long id)
+    {
+        NavigationManager.NavigateTo($"articles/view/{id}");
+    }
+
+    void EditCategories(long id)
+    {
+        NavigationManager.NavigateTo($"categories/edit/{id}");
+    }
+
+    async Task LoadMoreArticles()
+    {
+        await WikiService.CreateArticles();
+    }
+
+    async Task Clear()
+    {
+        await WikiService.Clear();
+    }
+}
